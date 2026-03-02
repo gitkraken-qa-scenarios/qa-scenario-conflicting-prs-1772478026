@@ -19,13 +19,16 @@ module.exports = {
   // ─── Rate Limiting ─────────────────────────────────────────────────────────
   rateLimiting: {
     // Maximum number of requests allowed per window per client IP
-    maxRequestsPerWindow: 100,
-    // Duration of the sliding window in milliseconds
-    windowMs: 60_000,
+    // Increased from 100 → 500 to support higher traffic from authenticated clients
+    maxRequestsPerWindow: 500,
+    // Expanded window from 60 s → 5 min to reduce burst penalty for legitimate users
+    windowMs: 300_000,
     // HTTP status code returned when the limit is exceeded
     statusCode: 429,
     // Whether to include rate-limit headers in every response
     includeHeaders: true,
+    // Return a Retry-After header so clients know when to resume
+    retryAfter: true,
   },
 
   // ─── Upstream API Timeouts ─────────────────────────────────────────────────
